@@ -105,23 +105,11 @@ wheels = [
 ]
 
 [[package]]
-name = "nvidia-cuda-nvcc-cu12"
-version = "12.8.61"
-source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" }
-wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/6d/9a/a3a8ad04049358a8de6f9b802793dcb2a7bee2e9b80a180cb294bee834c3/nvidia_cuda_nvcc_cu12-12.8.61-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl", hash = "sha256:171f605044ba17bc455d19cad289946c3dbea029a90c60dfa7b88e545bc8e329", size = 40121651 },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/82/5a/ebbe914d4c3fd5bbe50277be79ff83b65692926458a9f1067a2e0472a36d/nvidia_cuda_nvcc_cu12-12.8.61-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:28604ec42aaa09035b0fb7111432e5121bc385580b30c55d2acfb7d644b16548", size = 38001465 },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ea/36/52d63bcbe5a0bf4e5269098c9becae12d30508e5dedbab84a2cd9672b7da/nvidia_cuda_nvcc_cu12-12.8.61-py3-none-win_amd64.whl", hash = "sha256:4524739cfc080e9c9e53032912be8f020058e0a7186746d19acef3b6d916ea0b", size = 33410440 },
-]
-
-[[package]]
 name = "nvidia-cuda-nvrtc-cu12"
 version = "12.4.127"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" }
 wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/77/aa/083b01c427e963ad0b314040565ea396f914349914c298556484f799e61b/nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_aarch64.whl", hash = "sha256:0eedf14185e04b76aa05b1fea04133e59f465b6f960c0cbf4e37c3cb6b0ea198", size = 24133372 },
     { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/2c/14/91ae57cd4db3f9ef7aa99f4019cfa8d54cb4caa7e00975df6467e9725a9f/nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl", hash = "sha256:a178759ebb095827bd30ef56598ec182b85547f1508941a3d560eb7ea1fbf338", size = 24640306 },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/7c/30/8c844bfb770f045bcd8b2c83455c5afb45983e1a8abf0c4e5297b481b6a5/nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-win_amd64.whl", hash = "sha256:a961b2f1d5f17b14867c619ceb99ef6fcec12e46612711bcec78eb05068a60ec", size = 19751955 },
 ]
 
 [[package]]
@@ -207,9 +195,7 @@ name = "nvidia-nvjitlink-cu12"
 version = "12.4.127"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" }
 wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/02/45/239d52c05074898a80a900f49b1615d81c07fceadd5ad6c4f86a987c0bc4/nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_aarch64.whl", hash = "sha256:4abe7fef64914ccfa909bc2ba39739670ecc9e820c83ccc7a6ed414122599b83", size = 20552510 },
     { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ff/ff/847841bacfbefc97a00036e0fce5a0f086b640756dc38caea5e1bb002655/nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl", hash = "sha256:06b3b9b25bf3f8af351d664978ca26a16d2c5127dbd53c0497e28d1fb9611d57", size = 21066810 },
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/81/19/0babc919031bee42620257b9a911c528f05fb2688520dcd9ca59159ffea8/nvidia_nvjitlink_cu12-12.4.127-py3-none-win_amd64.whl", hash = "sha256:fd9020c501d27d135f983c6d3e244b197a7ccad769e34df53a42e276b0e25fa1", size = 95336325 },
 ]
 
 [[package]]
@@ -228,21 +214,8 @@ dependencies = [
     { name = "torch" },
 ]
 
-[package.optional-dependencies]
-all = [
-    { name = "nvidia-cuda-nvcc-cu12" },
-    { name = "nvidia-cuda-nvrtc-cu12" },
-    { name = "nvidia-nvjitlink-cu12" },
-]
-
 [package.metadata]
-requires-dist = [
-    { name = "nvidia-cuda-nvcc-cu12", marker = "extra == 'all'" },
-    { name = "nvidia-cuda-nvrtc-cu12", marker = "extra == 'all'" },
-    { name = "nvidia-nvjitlink-cu12", marker = "extra == 'all'", specifier = ">=12.3" },
-    { name = "torch", specifier = ">=2.6.0" },
-]
-provides-extras = ["all"]
+requires-dist = [{ name = "torch", specifier = ">=2.6.0" }]
 
 [[package]]
 name = "setuptools"

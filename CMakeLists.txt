@@ -29,7 +29,7 @@ if(DEFINED ENV{DEBUG})
 else()
     set(DEBUG_MODE 0)
 endif()
-
+message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 # check CMAKE_CUDA_COMPILER is set
 if(DEFINED CMAKE_CUDA_COMPILER)
     enable_language(CUDA)
@@ -45,26 +45,27 @@ else()
     set(USE_CUDA 0)
 endif()
 # Check if CUDA is available
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -allow-unsupported-compiler)
 if(${USE_CUDA} EQUAL 1)
     find_package(CUDA REQUIRED)
-    set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-O3)
+    set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -O3 --allow-unsupported-compiler)
     # set architecture
     if(NOT DEFINED CUDA_ARCH)
         set(CUDA_ARCH "native")
     endif()
     if(${DEBUG_MODE} EQUAL 1)
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-O0;-g)
+        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -O0 -g)
     endif()
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS};-O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
     if(${DEBUG_MODE} EQUAL 1)
-        set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS};-O0 -g)
+        set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O0 -g)
     endif()
     message(STATUS "CUDA found: Headers: ${CUDA_INCLUDE_DIRS}")
     message(STATUS "CUDA found: Libraries: ${CUDA_LIBRARIES}")
 else()
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS};-O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
     if(${DEBUG_MODE} EQUAL 1)
-        set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS};-O0 -g)
+        set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O0 -g)
     endif()
     message(STATUS "CUDA not found")
 endif()
@@ -75,7 +76,7 @@ set(EXTENSION_DIR ${PROJECT_SOURCE_DIR}/extension_cpp/csrc)
 
 # Find all C++ source files
 file(GLOB_RECURSE SOURCES ${EXTENSION_DIR}/*.cpp)
-
+message(STATUS "EXTENSION_DIR: ${EXTENSION_DIR}")
 # If CUDA is enabled, find CUDA source files
 if(${USE_CUDA} EQUAL 1)
     set(CUDA_EXTENSION_DIR ${EXTENSION_DIR}/cuda)
@@ -83,6 +84,7 @@ if(${USE_CUDA} EQUAL 1)
     list(APPEND SOURCES ${CUDA_SOURCES})
 endif()
 
+message(STATUS "Sources: ${SOURCES}")
 # Set the name of the Python extension module
 set(EXTENSION_MODULE_NAME ${PROJECT_NAME}._C)
 
@@ -90,6 +92,8 @@ set(EXTENSION_MODULE_NAME ${PROJECT_NAME}._C)
 # python_add_library(example MODULE example.c WITH_SOABI)
 # # Create the Python extension module
 python_add_library(${EXTENSION_MODULE_NAME} MODULE ${SOURCES} WITH_SOABI)
+
+target_compile_options(${EXTENSION_MODULE_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror -allow-unsupported-compiler)
 
 # Link against the Torch library
 target_link_libraries(${EXTENSION_MODULE_NAME} PRIVATE ${TORCH_LIBRARIES})

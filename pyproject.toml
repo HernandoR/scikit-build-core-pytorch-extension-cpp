@@ -1,5 +1,5 @@
 [build-system]
-requires = ["scikit-build-core>=0.1.0","torch","nvidia-cuda-nvcc-cu12","nvidia-cuda-runtime-cu11","nvidia-cuda-nvrtc-cu12","nvidia-cublas-cu12","nvidia-nvml-dev-cu12","nvidia-cudnn-cu12"]
+requires = ["scikit-build-core>=0.1.0","torch"]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -11,18 +11,21 @@ requires-python = ">=3.12"
 dependencies = [
     "torch>=2.6.0"
 ]
-[project.optional-dependencies]
-all = [
-    "nvidia-cuda-nvcc-cu12",
-    "nvidia-cuda-nvrtc-cu12",
-    "nvidia-nvjitlink-cu12>=12.3",
-]
+# [project.optional-dependencies]
+# all = [
+#     "nvidia-cuda-nvcc-cu12",
+#     "nvidia-cuda-nvrtc-cu12",
+#     "nvidia-nvjitlink-cu12>=12.3",
+# ]
 
 
 [tool.scikit-build]
 # enable debug
+cmake.verbose = true
+logging.level = "DEBUG"
 wheel.expand-macos-universal-tags = true
 minimum-version = "build-system.requires"
+# use clang and lld
 
 # [tool.uv]
 # no-build-isolation=true
