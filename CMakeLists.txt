@@ -87,12 +87,12 @@ endif()
 set(EXTENSION_MODULE_NAME ${PROJECT_NAME}._C)
 
 
-python_add_library(example MODULE example.c WITH_SOABI)
-# Create the Python extension module
-add_library(${EXTENSION_MODULE_NAME} SHARED ${SOURCES})
+# python_add_library(example MODULE example.c WITH_SOABI)
+# # Create the Python extension module
+python_add_library(${EXTENSION_MODULE_NAME} MODULE ${SOURCES} WITH_SOABI)
 
 # Link against the Torch library
-target_link_libraries(${EXTENSION_MODULE_NAME} ${TORCH_LIBRARIES})
+target_link_libraries(${EXTENSION_MODULE_NAME} PRIVATE ${TORCH_LIBRARIES})
 
 # Set the appropriate Python include directories
 target_include_directories(${EXTENSION_MODULE_NAME} PRIVATE ${Python_INCLUDE_DIRS})
