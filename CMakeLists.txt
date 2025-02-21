@@ -45,30 +45,30 @@ else()
     set(USE_CUDA 0)
 endif()
 # Check if CUDA is available
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -allow-unsupported-compiler)
-if(${USE_CUDA} EQUAL 1)
-    find_package(CUDA REQUIRED)
-    set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -O3 --allow-unsupported-compiler)
-    # set architecture
-    if(NOT DEFINED CUDA_ARCH)
-        set(CUDA_ARCH "native")
-    endif()
-    if(${DEBUG_MODE} EQUAL 1)
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -O0 -g)
-    endif()
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
-    if(${DEBUG_MODE} EQUAL 1)
-        set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O0 -g)
-    endif()
-    message(STATUS "CUDA found: Headers: ${CUDA_INCLUDE_DIRS}")
-    message(STATUS "CUDA found: Libraries: ${CUDA_LIBRARIES}")
-else()
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
-    if(${DEBUG_MODE} EQUAL 1)
-        set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O0 -g)
-    endif()
-    message(STATUS "CUDA not found")
-endif()
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+# if(${USE_CUDA} EQUAL 1)
+#     find_package(CUDA REQUIRED)
+#     set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -O3 --allow-unsupported-compiler)
+#     # set architecture
+#     if(NOT DEFINED CUDA_ARCH)
+#         set(CUDA_ARCH "native")
+#     endif()
+#     if(${DEBUG_MODE} EQUAL 1)
+#         set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -O0 -g)
+#     endif()
+#     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
+#     if(${DEBUG_MODE} EQUAL 1)
+#         set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O0 -g)
+#     endif()
+#     message(STATUS "CUDA found: Headers: ${CUDA_INCLUDE_DIRS}")
+#     message(STATUS "CUDA found: Libraries: ${CUDA_LIBRARIES}")
+# else()
+#     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O3 -fdiagnostics-color=always -DPy_LIMITED_API=0x03090000)
+#     if(${DEBUG_MODE} EQUAL 1)
+#         set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -O0 -g)
+#     endif()
+#     message(STATUS "CUDA not found")
+# endif()
 
 
 # Set the directory where the source files are located
@@ -86,14 +86,14 @@ endif()
 
 message(STATUS "Sources: ${SOURCES}")
 # Set the name of the Python extension module
-set(EXTENSION_MODULE_NAME ${PROJECT_NAME}._C)
+set(EXTENSION_MODULE_NAME _C)
 
 
 # python_add_library(example MODULE example.c WITH_SOABI)
 # # Create the Python extension module
 python_add_library(${EXTENSION_MODULE_NAME} MODULE ${SOURCES} WITH_SOABI)
-
-target_compile_options(${EXTENSION_MODULE_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror -allow-unsupported-compiler)
+# add_library(${EXTENSION_MODULE_NAME} MODULE ${SOURCES})
+# target_compile_options(${EXTENSION_MODULE_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
 # Link against the Torch library
 target_link_libraries(${EXTENSION_MODULE_NAME} PRIVATE ${TORCH_LIBRARIES})
@@ -106,11 +106,14 @@ target_include_directories(${EXTENSION_MODULE_NAME} PRIVATE ${TORCH_INCLUDE_DIRS
 if(${USE_CUDA} EQUAL 1)
     target_include_directories(${EXTENSION_MODULE_NAME} PRIVATE ${CUDA_INCLUDE_DIRS})
 endif()
+# set build directory
+set_target_properties(${EXTENSION_MODULE_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/extension_cpp)
 
 # Set the output directory for the shared library to be consistent with Python's expectations
 set_target_properties(${EXTENSION_MODULE_NAME} PROPERTIES PREFIX "")
 set_target_properties(${EXTENSION_MODULE_NAME} PROPERTIES SUFFIX ".so")
 set_target_properties(${EXTENSION_MODULE_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
+
 
 # install the library
 install(TARGETS ${EXTENSION_MODULE_NAME} DESTINATION ${PROJECT_SOURCE_DIR}/extension_cpp)
