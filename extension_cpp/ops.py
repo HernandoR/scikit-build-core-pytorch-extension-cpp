@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import torch
 from torch import Tensor
 
-__all__ = ["mymuladd", "myadd_out"]
+__all__ = ["myadd_out", "mymuladd"]
 
 
 def mymuladd(a: Tensor, b: Tensor, c: float) -> Tensor:
@@ -46,7 +48,8 @@ def _setup_context(ctx, inputs, output):
 # the backward formula for the operator and a `setup_context` function
 # to save values to be used in the backward.
 torch.library.register_autograd(
-    "extension_cpp::mymuladd", _backward, setup_context=_setup_context)
+    "extension_cpp::mymuladd", _backward, setup_context=_setup_context
+)
 
 
 @torch.library.register_fake("extension_cpp::mymul")

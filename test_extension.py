@@ -1,11 +1,12 @@
+from __future__ import annotations
+
+import unittest
+
 import torch
 from torch.testing._internal.common_utils import TestCase
 from torch.testing._internal.optests import opcheck
-import unittest
+
 import extension_cpp
-from torch import Tensor
-from typing import Tuple
-import torch.nn.functional as F
 
 
 def reference_muladd(a, b, c):
@@ -44,7 +45,9 @@ class TestMyMulAdd(TestCase):
     def _test_gradients(self, device):
         samples = self.sample_inputs(device, requires_grad=True)
         for args in samples:
-            diff_tensors = [a for a in args if isinstance(a, torch.Tensor) and a.requires_grad]
+            diff_tensors = [
+                a for a in args if isinstance(a, torch.Tensor) and a.requires_grad
+            ]
             out = extension_cpp.ops.mymuladd(*args)
             grad_out = torch.randn_like(out)
             result = torch.autograd.grad(out, diff_tensors, grad_out)
