@@ -2,9 +2,13 @@
 feel free to raise PRs if you have interest and just enough knowledge to solve any of the following issues.
 
 [ ] run test is not success by `python test_extension.py` but not `python test_extension.py`
+
 [ ] cuda compile options are not set. please approch to the `CMakeLists.txt` file
+
 [ ] the compiled _C.so file will show in the root of project
+
 [ ] remove redundent files
+
 [ ] add pybind11 example
 
 # C++/CUDA Extensions for PyTorch by scikit-build-core
